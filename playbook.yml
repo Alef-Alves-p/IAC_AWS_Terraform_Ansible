@@ -1,17 +1,49 @@
 ---
 - hosts: terraform-ansible
+  become: yes
   tasks:
-    - name: Instalando python3, virtualenv
+    - name: Atualizar cache de pacotes e instalar python3, python3-venv
       apt:
         pkg:
           - python3
-          - virtualenv
+          - python3-venv
         update_cache: yes
-      become: yes
-    - name: instalando dependencias com pip-(Django, Django REST)
+
+    - name: Criar diretório para o projeto
+      file:
+        path: /home/ubuntu/depe
+        state: directory
+        mode: '0755'
+
+    - name: Criar ambiente virtual
+      shell: python3 -m venv /home/ubuntu/depe/venv
+      args:
+        creates: /home/ubuntu/depe/venv/bin/activate
+
+    - name: Instalar dependências com pip (Django, Django REST)
       pip:
         virtualenv: /home/ubuntu/depe/venv
         name:
           - django
           - djangorestframework
-          
+
+    - name: Verificar se o projeto Django já existe
+      stat:
+        path: /home/ubuntu/depe/setup/manage.py
+      register: project_exists
+
+    - name: Iniciar projeto Django
+      shell: |
+        source /home/ubuntu/depe/venv/bin/activate
+        django-admin startproject setup /home/ubuntu/depe/
+      args:
+        executable: /bin/bash
+      when: not project_exists.stat.exists
+      #ignore_errors: yes
+
+    - name:  Alterando hosts do settings
+      lineinfile:
+        path: /home/ubuntu/depe/setup/settings.py
+        regexp: 'ALLOWED_HOSTS'
+        line: 'ALLOWED_HOSTS = ["*"]'
+        backrefs: yes
