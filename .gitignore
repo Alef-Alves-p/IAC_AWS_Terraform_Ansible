@@ -9,6 +9,77 @@
 *.tfstate
 *.tfstate.*
 
+# Terraform variable files
+*.tfvars
+*.tfvars.json
+
+# Crash log files
+crash.log
+
+# Exclude sensitive files
 *.pem
+*.key
+*.crt
+
+# Credential files
+*.env
+.env.*
+*.credentials
+credentials/
+secrets/
+
+# Log files
+*.log
+logs/
+
+# Text files (use specific patterns if needed)
 *.txt
 *.identifier
+
+# IDE and editor specific files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Python specific files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Temporary files
+*.tmp
+*.swp
+*~
+.DS_Store
+Thumbs.db
+
+# Node.js specific files
+node_modules/
+
+# Ruby specific files
+.bundle/
+vendor/
+
+# Go specific files
+vendor/
+
+# Java specific files
+*.class
+*.jar
+*.war
+
+# Build directories
+build/
+dist/
+target/
+
+# Binary files
+*.exe
+*.dll
+*.so
+*.dylib
+*.o
+*.a
+*.out
